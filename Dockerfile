@@ -39,6 +39,7 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  telnet \
  python \
  wireshark \ 
+ debconf \
  cpulimit
 #
 # -----------------------------------------------------------------
@@ -114,9 +115,14 @@ ADD startup.sh /src/misc/startup.sh
 ADD iourc.sample /src/misc/iourc.txt
 ADD gcm /usr/local/bin/gcm
 # Set the locale
-RUN locale-gen fr_FR.UTF-8  
-ENV LANG fr_FR.UTF-8  
-ENV LANGUAGE fr_FR:fr  
-ENV LC_ALL fr_FR.UTF-8  
+RUN echo "Europe/Paris" > /etc/timezone && \
+	dpkg-reconfigure -f noninteractive tzdata
+RUN export LANGUAGE=fr_FR.UTF-8 && \
+	export LANG=fr_FR.UTF-8 && \
+	export LC_ALL=fr_FR.UTF-8 && \
+	locale-gen fr_FR.UTF-8 && \
+	DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
+
 RUN chmod a+x /src/misc/startup.sh
 ENTRYPOINT cd /src/misc ; ./startup.sh
