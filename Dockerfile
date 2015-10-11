@@ -1,5 +1,5 @@
 # Version: 0.7.1
-FROM ubuntu:14.04
+FROM debian:jessie
 MAINTAINER pushou 
 #
 # increase the version to force recompilation of everything
@@ -16,7 +16,6 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 # ----------------------------------------------------------------- 
 # install needed packages to build and run gns3 and related sw
 #
-RUN apt-get install --reinstall libpython3.4-stdlib
 RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  git  \
  wget \
