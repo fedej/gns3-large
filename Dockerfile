@@ -53,14 +53,14 @@ RUN cd /src/dynamips/build ;  cmake .. ; make ; make install
 #
 RUN cd /src; git clone https://github.com/GNS3/gns3-gui.git
 RUN cd /src; git clone https://github.com/GNS3/gns3-server.git
-RUN cd /src/gns3-server ; git checkout v1.2.3 ; python3 setup.py install
-RUN cd /src/gns3-gui ; git checkout v1.2.3 ; python3 setup.py install
+RUN cd /src/gns3-server ; git checkout v1.3.11 ; python3 setup.py install
+RUN cd /src/gns3-gui ; git checkout v1.3.11 ; python3 setup.py install
 #
 #-----------------------------------------------------------------------
 # compile and install vpcs, 64 bit version
 #
 RUN cd /src ; \
-    wget -O - http://sourceforge.net/projects/vpcs/files/0.5/beta/vpcs-0.5b2-src.tbz/download \
+    wget -O - http://sourceforge.net/projects/vpcs/files/0.8/vpcs-0.8-src.tbz/download \
     | bzcat | tar -xvf -
 RUN cd /src/vpcs-*/src ; ./mk.sh 64
 RUN cp /src/vpcs-*/src/vpcs /usr/local/bin/vpcs
