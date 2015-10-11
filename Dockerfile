@@ -30,11 +30,7 @@ RUN apt-get update && apt-get install -y \
  python3-netifaces \
  python3-zmq \
  python3-tornado \
- libpython3.4-stdlib \
- libpython3.4-dev \
- libpython3-dev
  python3-dev \
- python3.4-dev \
  bison \
  flex \
  lib32z1 \
