@@ -105,7 +105,7 @@ RUN cd /src/misc; wget http://kuthulu.com/gcm/gnome-connection-manager_1.1.0_all
 #RUN cd /src/misc; wget http://va.ler.io/myfiles/deb/gnome-connection-manager_1.1.0_all.deb
 RUN apt-get -y install expect python-vte python-glade2
 RUN mkdir -p /usr/share/desktop-directories
-RUN cd /src/misc; dpkg -i gnome-connection-manager_1.1.0_all.deb
+#RUN cd /src/misc; dpkg -i gnome-connection-manager_1.1.0_all.deb
 RUN (while true;do echo;done) | perl -MCPAN -e 'install JSON::Tiny'
 RUN (while true;do echo;done) | perl -MCPAN -e 'install File::Slurp'
 #RUN cd /usr/local/bin; ln -s /usr/share/gnome-connection-manager/* .
