@@ -34,7 +34,6 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  flex \
  lib32z1 \
  lib32ncurses5 \
- lib32bz2-1.0 \
  lxterminal \
  telnet \
  python \
