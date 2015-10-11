@@ -17,7 +17,7 @@ ENV DEBCONF_NONINTERACTIVE_SEEN true
 # install needed packages to build and run gns3 and related sw
 #
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  git  \
  wget \
  libpcap-dev \
