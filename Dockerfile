@@ -82,7 +82,7 @@ RUN cd /src/iouyap ; cp iouyap /usr/local/bin
 # before compiling dynamips
 #
 RUN dpkg --add-architecture i386
-RUN apt-get update && RUN apt-get -y install \ 
+RUN apt-get update && apt-get -y install \ 
    libssl-dev:i386 \
    libssl1.0.0:i386 \
    qemu \
