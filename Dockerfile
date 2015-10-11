@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
  uuid-dev \
  libelf-dev \
  cmake \
- python3-setuptool \
+ python3-setuptools \
  python3-pyqt4 \
  python3-ws4py \
  python3-netifaces \
