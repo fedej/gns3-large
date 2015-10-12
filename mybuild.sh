@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo docker build -t="digiampietro/gns3-large" .
+sudo docker build -t="jmp/gns3" .

@@ -21,7 +21,7 @@ export GNS3NETWORK=10.123.0.0      # IP network used inside the GNS3 emulated ne
 export GNS3NETMASK=255.255.0.0     # IP netmask used inside the GNS3 emulated network
 export GROUTE2GNS3=1               # enable routing from the container eth0 to the emulated network
 
-sudo docker run -h gns3-large                     \
+sudo docker run -h dockergns3                     \
                 --rm                              \
                 -v /tmp/.X11-unix:/tmp/.X11-unix  \
                 -v $HOME:$HOME                    \
@@ -40,5 +40,4 @@ sudo docker run -h gns3-large                     \
                 -e GROUTE2GNS3=$GROUTE2GNS3       \
                 -e GRUNXTERM=$GRUNXTERM           \
                 --privileged                      \
-                -it pushou/gns3-large
-
+                -it jmp/gns3
