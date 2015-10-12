@@ -12,8 +12,6 @@ ENV GNS3LARGEVERSION 0.0.1
 #
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
-ENV LC_ALL=fr_FR.UTF-8
-ENV LANG=fr_FR.UTF-8
 #
 # ----------------------------------------------------------------- 
 # install needed packages to build and run gns3 and related sw
@@ -44,6 +42,20 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  debconf \
  locales \
  cpulimit
+ENV LC_ALL=fr_FR.UTF-8
+ENV LANG=fr_FR.UTF-8
+ENV LANGUAGE=fr_FR:fr
+ENV LC_TIME=fr_FR.UTF-8
+ENV LC_COLLATE=fr_FR.UTF-8
+
+
+RUN echo "Europe/Paris" > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=fr_FR.UTF-8
+
 #
 # -----------------------------------------------------------------
 # compile and install dynamips, gns3-server, gns3-gui
@@ -118,12 +130,6 @@ ADD startup.sh /src/misc/startup.sh
 ADD iourc.sample /src/misc/iourc.txt
 ADD gcm /usr/local/bin/gcm
 # Set the locale
-RUN echo "Europe/Paris" > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata && \
-    sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
-    echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=fr_FR.UTF-8
 
 RUN chmod a+x /src/misc/startup.sh
 ENTRYPOINT cd /src/misc ; ./startup.sh
