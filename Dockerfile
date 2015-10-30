@@ -12,14 +12,21 @@ ENV GNS3LARGEVERSION 0.0.1
 #
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
+RUN echo "deb http://debian.iutbeziers.fr/debian jessie main" > /etc/apt/sources.list
+
 #
 # ----------------------------------------------------------------- 
 # install needed packages to build and run gns3 and related sw
 #
+RUN echo "locales locales/default_environment_locale select fr_FR.UTF-8" | debconf-set-selections \
+&& echo "locales locales/locales_to_be_generated multiselect 'fr_FR.UTF-8 UTF-8'" | debconf-set-selections
+
+
 RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  git  \
  wget \
  bzip2 \
+ build-essential \
  libpcap-dev \
  uuid-dev \
  libelf-dev \
@@ -41,20 +48,15 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  wireshark \ 
  debconf \
  locales \
+ flex \
+ bison \ 
+ apt-utils \
+ debconf-utils \
+ iproute2 \
  cpulimit
-ENV LC_ALL=fr_FR.UTF-8
-ENV LANG=fr_FR.UTF-8
-ENV LANGUAGE=fr_FR:fr
-ENV LC_TIME=fr_FR.UTF-8
-ENV LC_COLLATE=fr_FR.UTF-8
 
+RUN echo "Europe/Paris" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && locale-gen --purge en_US.UTF-8
 
-RUN echo "Europe/Paris" > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata && \
-    sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
-    echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=fr_FR.UTF-8
 
 #
 # -----------------------------------------------------------------
@@ -84,14 +86,16 @@ RUN cp /src/vpcs-*/src/vpcs /usr/local/bin/vpcs
 # compile and install iniparser (needed for iouyap) and 
 # iouyap (needed to run iou without additional virtual machine)
 #
-RUN cd /src ; git clone http://github.com/ndevilla/iniparser.git
-RUN cd /src/iniparser ; make
-RUN cd /src/iniparser ; cp libiniparser.* /usr/lib ; \
-                        cp src/iniparser.h /usr/local/include/ ; \
-                        cp src/dictionary.h /usr/local/include/
+RUN git clone http://github.com/ndevilla/iniparser.git
+RUN cd iniparser ; make; \
+cp libiniparser.* /usr/lib ; \
+cp src/iniparser.h /usr/local/include/ ; \
+cp src/dictionary.h /usr/local/include/
 #
 RUN cd /src ; git clone https://github.com/GNS3/iouyap.git
+COPY iniparser.h /src/iouyap/iniparser/iniparser.h
 RUN cd /src/iouyap ; make
+RUN ls /src/iouyap
 RUN cd /src/iouyap ; cp iouyap /usr/local/bin
 #
 # to run iou 32 bit support is needed so add i386 repository, cannot be done
