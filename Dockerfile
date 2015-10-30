@@ -12,14 +12,14 @@ ENV GNS3LARGEVERSION 0.0.1
 #
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
+ENV LC_ALL=fr_FR.UTF-8
+ENV LANG=fr_FR.UTF-8
 RUN echo "deb http://debian.iutbeziers.fr/debian jessie main" > /etc/apt/sources.list
 
 #
 # ----------------------------------------------------------------- 
 # install needed packages to build and run gns3 and related sw
 #
-RUN echo "locales locales/default_environment_locale select fr_FR.UTF-8" | debconf-set-selections \
-&& echo "locales locales/locales_to_be_generated multiselect 'fr_FR.UTF-8 UTF-8'" | debconf-set-selections
 
 
 RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
@@ -53,9 +53,22 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  apt-utils \
  debconf-utils \
  iproute2 \
+ net-tools \
  cpulimit
 
-RUN echo "Europe/Paris" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata && locale-gen --purge en_US.UTF-8
+ENV LC_ALL=fr_FR.UTF-8
+ENV LANG=fr_FR.UTF-8
+ENV LANGUAGE=fr_FR:fr
+ENV LC_TIME=fr_FR.UTF-8
+ENV LC_COLLATE=fr_FR.UTF-8
+
+
+RUN echo "Europe/Paris" > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=fr_FR.UTF-8
 
 
 #
