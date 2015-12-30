@@ -4,7 +4,7 @@ MAINTAINER pushou
 #
 # increase the version to force recompilation of everything
 #
-ENV GNS3LARGEVERSION 0.0.1
+ENV GNS3LARGEVERSION 0.0.2
 #
 # ------------------------------------------------------------------
 # environment variables to avoid that dpkg-reconfigure 
@@ -77,14 +77,14 @@ RUN echo "Europe/Paris" > /etc/timezone && \
 #
 RUN mkdir /src
 RUN cd /src; git clone https://github.com/GNS3/dynamips.git
-RUN cd /src/dynamips ; git checkout v0.2.14
+RUN cd /src/dynamips ; git checkout v0.2.15
 RUN mkdir /src/dynamips/build
 RUN cd /src/dynamips/build ;  cmake .. ; make ; make install
 #
 RUN cd /src; git clone https://github.com/GNS3/gns3-gui.git
 RUN cd /src; git clone https://github.com/GNS3/gns3-server.git
-RUN cd /src/gns3-server ; git checkout v1.3.11 ; python3 setup.py install
-RUN cd /src/gns3-gui ; git checkout v1.3.11 ; python3 setup.py install
+RUN cd /src/gns3-server ; git checkout v1.3.13 ; python3 setup.py install
+RUN cd /src/gns3-gui ; git checkout v1.3.13 ; python3 setup.py install
 #
 #-----------------------------------------------------------------------
 # compile and install vpcs, 64 bit version
@@ -106,7 +106,7 @@ cp src/iniparser.h /usr/local/include/ ; \
 cp src/dictionary.h /usr/local/include/
 #
 RUN cd /src ; git clone https://github.com/GNS3/iouyap.git
-COPY iniparser.h /src/iouyap/iniparser/iniparser.h
+#COPY iniparser.h /src/iouyap/iniparser/iniparser.h
 RUN cd /src/iouyap ; make
 RUN ls /src/iouyap
 RUN cd /src/iouyap ; cp iouyap /usr/local/bin
