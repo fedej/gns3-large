@@ -23,6 +23,7 @@ RUN echo "deb http://debian.iutbeziers.fr/debian jessie main" > /etc/apt/sources
 
 
 RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
+#RUN apt-get install -y \
  git  \
  wget \
  bzip2 \
@@ -32,7 +33,8 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  libelf-dev \
  cmake \
  python3-setuptools \
- python3-pyqt4 \
+ python3-pyqt5 \
+ python3-pyqt5.qtsvg \
  python3-ws4py \
  python3-netifaces \
  python3-zmq \
@@ -55,6 +57,7 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  iproute2 \
  libpcap-dev \
  net-tools \
+ sudo \
  cpulimit
 
 ENV LC_ALL=fr_FR.UTF-8
@@ -149,10 +152,12 @@ ADD iourc.sample /src/misc/iourc.txt
 ADD gcm /usr/local/bin/gcm
 # Set the locale
 
-RUN cd /src
-RUN git clone https://github.com/GNS3/ubridge.git
-RUN cd ubridge
-RUN make && make install
+
+RUN cd /src && git clone https://github.com/GNS3/ubridge.git
+RUN cd /src/ubridge && make 
+# cannot  set capabilities on file in a build - must be resolv on run
+RUN cd /src/ubridge && chmod +x ubridge && sudo cp ubridge /usr/local/bin/ubridge
+
 
 RUN chmod a+x /src/misc/startup.sh
 ENTRYPOINT cd /src/misc ; ./startup.sh

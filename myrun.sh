@@ -1,5 +1,6 @@
 #!/bin/sh
 
+xhost +
 export GDISPLAY=unix/$DISPLAY      # forward X11 display to the host machine
 export GUSERNAME=`id -u -n`        # current user's username
 export GUID=`id -u`                # current user's user id
@@ -40,4 +41,4 @@ sudo docker run -h dockergns3                     \
                 -e GROUTE2GNS3=$GROUTE2GNS3       \
                 -e GRUNXTERM=$GRUNXTERM           \
                 --privileged                      \
-                -it jmp/gns3
+                -it jmp/gns3 
