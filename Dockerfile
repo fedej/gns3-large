@@ -4,7 +4,7 @@ MAINTAINER pushou
 #
 # increase the version to force recompilation of everything
 #
-ENV GNS3LARGEVERSION 0.0.2
+ENV GNS3LARGEVERSION 0.0.3
 #
 # ------------------------------------------------------------------
 # environment variables to avoid that dpkg-reconfigure 
@@ -53,6 +53,7 @@ RUN apt-get update && apt-get upgrade -y  && apt-get install -y \
  apt-utils \
  debconf-utils \
  iproute2 \
+ libpcap-dev \
  net-tools \
  cpulimit
 
@@ -83,8 +84,8 @@ RUN cd /src/dynamips/build ;  cmake .. ; make ; make install
 #
 RUN cd /src; git clone https://github.com/GNS3/gns3-gui.git
 RUN cd /src; git clone https://github.com/GNS3/gns3-server.git
-RUN cd /src/gns3-server ; git checkout v1.3.13 ; python3 setup.py install
-RUN cd /src/gns3-gui ; git checkout v1.3.13 ; python3 setup.py install
+RUN cd /src/gns3-server ; git checkout v1.4.0 ; python3 setup.py install
+RUN cd /src/gns3-gui ; git checkout v1.4.0 ; python3 setup.py install
 #
 #-----------------------------------------------------------------------
 # compile and install vpcs, 64 bit version
@@ -147,6 +148,11 @@ ADD startup.sh /src/misc/startup.sh
 ADD iourc.sample /src/misc/iourc.txt
 ADD gcm /usr/local/bin/gcm
 # Set the locale
+
+RUN cd /src
+RUN git clone https://github.com/GNS3/ubridge.git
+RUN cd ubridge
+RUN make && make install
 
 RUN chmod a+x /src/misc/startup.sh
 ENTRYPOINT cd /src/misc ; ./startup.sh
