@@ -5,7 +5,7 @@
 #
 export GNS3NETWORK=10.123.0.0
 export GNS3NETMASK=255.255.0.0
-CID=`docker ps | grep gns3-large | awk '{print $1}'`
+CID=`docker ps | grep fedej/gns3 | awk '{print $1}'`
 echo Container ID: $CID
 CIDIP=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' $CID`
 echo Container IP: $CIDIP
@@ -17,4 +17,3 @@ then
 fi
 echo "adding route"
 route add -net $GNS3NETWORK netmask $GNS3NETMASK gw $CIDIP
-

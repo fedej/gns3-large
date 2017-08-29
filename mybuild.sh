@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo docker build -t="jmp/gns3" .
+docker build -t fedej/gns3 .

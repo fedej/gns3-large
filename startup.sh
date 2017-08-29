@@ -3,17 +3,19 @@
 # add current user and user's primary group
 #
 groupadd -g $GGID $GGROUP
+groupadd sudo
 useradd -u $GUID -s $GSHELL -c $GUSERNAME -g $GGID -M -d $GHOME $GUSERNAME
 usermod -a -G sudo $GUSERNAME
 echo $GUSERNAME:docker | chpasswd
+sed -i "/%sudo/ s/# *//" /etc/sudoers
 #
 # generate IOU License
 #
 if [ -e $GHOME/gns3-misc/keygen.py ]
-then 
+then
     cp $GHOME/gns3-misc/keygen.py /src/misc/
     cd /src/misc
-    ./keygen.py  | egrep "license|`hostname`" > iourc.txt 
+    ./keygen.py  | egrep "license|`hostname`" > iourc.txt
 else
     echo "IOU License File generator keygen.py not found"
     echo "please put keygen.py in"
@@ -25,12 +27,11 @@ fi
 #
 echo "-------------------------------------------------------------------"
 echo "tap0 has address $GTAPIP netmask $GTAPMASK"
-echo "if yuou use the cloud symbol to connect to the physical network"
+echo "if you use the cloud symbol to connect to the physical network"
 echo "use an address on the same subnet, and, on the cloud symbol,"
 echo "select the  \"NIO TAP\" tab and add the \"tap0\" device"
 echo "-------------------------------------------------------------------"
 chmod 0666 /dev/net/tun
-chmod +s /usr/local/bin/iouyap
 tunctl -u $GUSERNAME
 ifconfig tap0 $GTAPIP netmask $GTAPMASK up
 echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -42,7 +43,7 @@ then
     iptables -A INPUT -i tap0 -j ACCEPT
 fi
 if [ "$GROUTE2GNS3" = "1" ]
-then 
+then
     route add -net $GNS3NETWORK netmask $GNS3NETMASK gw $GTAPIP
 fi
 if [ "$GRUNXTERM" = "1" ]
@@ -55,8 +56,5 @@ else
     # become the current user and start a shell
     su -l $GUSERNAME
     # another root shell
-    /bin/bash
+    /bin/sh
 fi
-
-
-

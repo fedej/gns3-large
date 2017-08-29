@@ -17,12 +17,12 @@ export GRUNXTERM=0                 # start lxtermina, useful in windows
 #
 export GTAPIP=10.123.1.1           # the tap0 IP address
 export GTAPMASK=255.255.255.0      # the tap0 IP netmask
-export GTAPNATENABLE=0             # enable NAT on tap0 outgoing traffic (if 1 GROUTE2GNS3 must be 0)
+export GTAPNATENABLE=1             # enable NAT on tap0 outgoing traffic (if 1 GROUTE2GNS3 must be 0)
 export GNS3NETWORK=10.123.0.0      # IP network used inside the GNS3 emulated network
 export GNS3NETMASK=255.255.0.0     # IP netmask used inside the GNS3 emulated network
-export GROUTE2GNS3=1               # enable routing from the container eth0 to the emulated network
+export GROUTE2GNS3=0               # enable routing from the container eth0 to the emulated network
 
-sudo docker run -h dockergns3                     \
+docker run -h dockergns3                     \
                 --rm                              \
                 -v /tmp/.X11-unix:/tmp/.X11-unix  \
                 -v $HOME:$HOME                    \
@@ -41,4 +41,4 @@ sudo docker run -h dockergns3                     \
                 -e GROUTE2GNS3=$GROUTE2GNS3       \
                 -e GRUNXTERM=$GRUNXTERM           \
                 --privileged                      \
-                -it jmp/gns3 
+                -it fedej/gns3
